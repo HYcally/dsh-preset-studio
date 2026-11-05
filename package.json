@@ -1,0 +1,19 @@
+{
+  "name": "dsh-preset-studio",
+  "version": "2.0.0",
+  "private": true,
+  "description": "A visual studio for DeepSeek Harness agent presets: files, prompt injections, documents, skills and tool rows, all in one panel.",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "studio",
+    "runtime-inject",
+    "runtime-docs"
+  ],
+  "scripts": {
+    "test": "node tools/run-all.mjs",
+    "test:host": "node tools/studio-flow.mjs && node tools/injector-test.mjs"
+  }
+}

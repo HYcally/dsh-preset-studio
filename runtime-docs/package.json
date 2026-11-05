@@ -1,0 +1,11 @@
+{
+  "name": "@local/dsh-studio-docs",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "给预设一个 doc_update 工具，让模型能把新认知写回文档。运行时零件，不含界面。",
+  "exports": {
+    ".": "./index.js"
+  },
+  "files": ["index.js", "frontmatter.js"]
+}

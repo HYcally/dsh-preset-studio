@@ -1,0 +1,35 @@
+# __TITLE__ —— 由「预设工作室」从 模板\基础 复制生成。
+#
+# 占位符在复制时已替换：__TITLE__ 显示名、__PRESET_ID__ 预设 id、__PACKAGE__ 包名、__DIR__ 本目录。
+# 下面这几行就是这个预设的全部接线，面板里「未接上」的提示应该都是空的：
+#   技能目录  → skill-filesystem 的 customSkillDirs
+#   投递器    → studio-inject 读 注入\
+#   写回工具  → studio-docs 读 文档\
+- insert:
+    - id: __PRESET_ID__
+      name: '@deepseek-ai/dsh-agent-preset'
+      config:
+        id: __PRESET_ID__
+        order: 9
+        plugins:
+          - id: persona
+            name: '@deepseek-ai/dsh-persona'
+            config:
+              prefix: '__PERSONA__'
+          - id: skill-filesystem
+            name: '@deepseek-ai/dsh-skill-filesystem'
+            config:
+              includeDefaultRoots: false
+              customSkillDirs:
+                - '__DIR__\技能'
+                - '__DIR__\文档'
+          - id: tool-skill
+            name: '@deepseek-ai/dsh-tool-skill'
+          - id: studio-docs
+            name: '@local/dsh-studio-docs'
+            config:
+              dir: '__DIR__\文档'
+          - id: studio-inject
+            name: '@local/dsh-studio-inject'
+            config:
+              dir: '__DIR__\注入'

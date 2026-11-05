@@ -1,0 +1,11 @@
+{
+  "name": "__PACKAGE__",
+  "version": "0.1.0",
+  "private": true,
+  "description": "__TITLE__",
+  "dsh": {
+    "bundle": {
+      "patch": "cordis.patch.yml"
+    }
+  }
+}
