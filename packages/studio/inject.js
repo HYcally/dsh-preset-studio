@@ -1,10 +1,12 @@
 /**
  * Injection delivery — a preset-side part with no UI of its own.
  *
- * A preset that wants its `注入` folder delivered adds one row to its patch:
+ * A preset that wants its `注入` folder delivered adds one row to its patch.
+ * The injector ships inside the `dsh-preset-studio` package as the `./inject`
+ * subpath, so it arrives with the panel instead of as a second install:
  *
  *   - id: studio-inject
- *     name: '@local/dsh-studio-inject'
+ *     name: 'dsh-preset-studio/inject'
  *     config:
  *       dir: '<preset dir>\注入'
  *
@@ -38,7 +40,7 @@ import path from 'node:path'
 import { readBoolean, readField, readNumber, splitFrontmatter } from './frontmatter.js'
 
 /** Stable cordis plugin name. */
-export const name = '@local/dsh-studio-inject'
+export const name = 'dsh-preset-studio/inject'
 /** The prompt registry is the only service this row needs. */
 export const inject = ['systemPrompt']
 

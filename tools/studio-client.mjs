@@ -15,7 +15,7 @@ const WEB = process.env.DSH_WEB_URL
 if (!WEB) throw new Error('set DSH_WEB_URL to the running Web GUI URL')
 const BASE = WEB.replace(/\/+$/, '') + '/'
 // Paths are resolved from this file, so the project can move without edits.
-const CLIENT = fileURLToPath(new URL('../studio/client.js', import.meta.url))
+const CLIENT = fileURLToPath(new URL('../packages/studio/client.js', import.meta.url))
 
 /* ── minimal hooks runtime ── */
 let current = null

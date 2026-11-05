@@ -11,7 +11,7 @@ import fs from 'node:fs'
 import os from 'node:os'
 import path from 'node:path'
 
-const BUNDLE = fileURLToPath(new URL('../studio/index.js', import.meta.url))
+const BUNDLE = fileURLToPath(new URL('../packages/studio/index.js', import.meta.url))
 const mod = await import(pathToFileURL(BUNDLE).href)
 
 const root = fs.mkdtempSync(path.join(os.tmpdir(), 'studio-flow-'))
@@ -69,7 +69,7 @@ fs.writeFileSync(
     '            config:',
     "              prefix: '__PERSONA__'",
     '          - id: studio-inject',
-    "            name: '@local/dsh-studio-inject'",
+    "            name: 'dsh-preset-studio/inject'",
     '            config:',
     "              dir: '__DIR__\\注入'",
     '',
@@ -182,7 +182,7 @@ console.log(afterWire)
 expect(wiredDoc.status === 200, 'doc wire failed: ' + wiredDoc.body)
 expect(wiredDoc.json.steps.length === 2, 'doc wire must report both steps, got ' + JSON.stringify(wiredDoc.json.steps))
 expect(afterWire.includes("'" + path.join(bareDir, '文档') + "'"), 'the doc dir is not in customSkillDirs')
-expect(afterWire.includes("name: '@local/dsh-studio-docs'"), 'the write-back row is missing')
+expect(afterWire.includes("name: 'dsh-preset-studio/docs'"), 'the write-back row is missing')
 expect(afterWire.includes("dir: '" + path.join(bareDir, '文档') + "'"), 'the write-back row points elsewhere')
 const again = await call('POST', R.wire, { preset: bareDir, type: 'doc' })
 expect(again.json.changed === false, 'a second wire must be a no-op')
@@ -190,7 +190,7 @@ expect(patchText() === afterWire, 'a second wire must not touch the file')
 
 const wiredInject = await call('POST', R.wire, { preset: bareDir, type: 'inject' })
 expect(wiredInject.json.steps.join(',') === '投递器', 'inject wire must add exactly the injector')
-expect(patchText().includes("name: '@local/dsh-studio-inject'"), 'the injector row is missing')
+expect(patchText().includes("name: 'dsh-preset-studio/inject'"), 'the injector row is missing')
 
 /* ── 5. the listing now agrees ── */
 const after = presetOf((await call('GET', R.presets)).json, bareDir)

@@ -275,8 +275,8 @@ export function isToolRow(name) {
  */
 const CONSUMER_DEFS = {
   'skill-dir': { label: '技能目录' },
-  inject: { label: '投递器', row: { id: 'studio-inject', name: '@local/dsh-studio-inject' } },
-  docs: { label: '写回工具', row: { id: 'studio-docs', name: '@local/dsh-studio-docs' } },
+  inject: { label: '投递器', row: { id: 'studio-inject', name: 'dsh-preset-studio/inject' } },
+  docs: { label: '写回工具', row: { id: 'studio-docs', name: 'dsh-preset-studio/docs' } },
 }
 
 /** The row a consumer owns, if it owns one. */
@@ -958,7 +958,7 @@ export function createPresetFromTemplate(config, root, values) {
   const guide = path.join(dir, '模板说明.md')
   if (fs.existsSync(guide)) fs.rmSync(guide)
   const replacements = [
-    ['__PACKAGE__', '@local/dsh-preset-' + id],
+    ['__PACKAGE__', 'dsh-preset-' + id],
     ['__PRESET_ID__', id],
     ['__TITLE__', title],
     ['__DIR__', dir],

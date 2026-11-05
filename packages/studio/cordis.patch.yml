@@ -1,5 +1,9 @@
 # 预设工作室（DSH 面板）：一个面板管预设的全部条目（文件 / 注入 / 文档 / 技能 / 工具）。
 #
+# 同一个包还导出两件运行时零件，由「预设」自己的 patch 行挂载：
+#   dsh-preset-studio/inject   读 注入\  → 系统提示词
+#   dsh-preset-studio/docs     读 文档\  → doc_update 工具
+#
 # 默认把仓库里的 预设\ 当根目录、模板\基础\ 当模板，所以这里不用写任何路径。
 # 目录换了位置时，再打开下面这段覆盖：
 #      config:
@@ -7,4 +11,4 @@
 #        template: 'D:\某处\模板\基础'
 - insert:
     - id: studio
-      name: '@local/dsh-studio'
+      name: 'dsh-preset-studio'

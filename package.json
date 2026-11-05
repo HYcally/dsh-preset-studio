@@ -1,16 +1,15 @@
 {
-  "name": "dsh-preset-studio",
-  "version": "2.0.0",
+  "name": "dsh-preset-studio-repo",
+  "version": "2.1.0",
   "private": true,
-  "description": "A visual studio for DeepSeek Harness agent presets: files, prompt injections, documents, skills and tool rows, all in one panel.",
+  "description": "Repository for dsh-preset-studio: the panel, the injector and the document write-back tool in one installable package.",
   "license": "MIT",
-  "engines": {
-    "node": ">=22"
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HYcally/dsh-preset-studio.git"
   },
   "workspaces": [
-    "studio",
-    "runtime-inject",
-    "runtime-docs"
+    "packages/*"
   ],
   "scripts": {
     "test": "node tools/run-all.mjs",

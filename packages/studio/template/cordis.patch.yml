@@ -3,8 +3,8 @@
 # 占位符在复制时已替换：__TITLE__ 显示名、__PRESET_ID__ 预设 id、__PACKAGE__ 包名、__DIR__ 本目录。
 # 下面这几行就是这个预设的全部接线，面板里「未接上」的提示应该都是空的：
 #   技能目录  → skill-filesystem 的 customSkillDirs
-#   投递器    → studio-inject 读 注入\
-#   写回工具  → studio-docs 读 文档\
+#   投递器    → dsh-preset-studio/inject 读 注入\
+#   写回工具  → dsh-preset-studio/docs   读 文档\
 - insert:
     - id: __PRESET_ID__
       name: '@deepseek-ai/dsh-agent-preset'
@@ -26,10 +26,10 @@
           - id: tool-skill
             name: '@deepseek-ai/dsh-tool-skill'
           - id: studio-docs
-            name: '@local/dsh-studio-docs'
+            name: 'dsh-preset-studio/docs'
             config:
               dir: '__DIR__\文档'
           - id: studio-inject
-            name: '@local/dsh-studio-inject'
+            name: 'dsh-preset-studio/inject'
             config:
               dir: '__DIR__\注入'

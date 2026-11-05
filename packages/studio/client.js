@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-  id: '@local/dsh-studio',
+  id: 'dsh-preset-studio',
   factory: (require) => {
     const React = require('react')
     const h = React.createElement

@@ -8,6 +8,14 @@
  * document that already exists. It never creates a document and never touches
  * the frontmatter, so the catalog entry the model is looking at stays valid.
  *
+ * It ships inside the `dsh-preset-studio` package as the `./docs` subpath, so
+ * a preset adds one row and gets the tool:
+ *
+ *   - id: studio-docs
+ *     name: 'dsh-preset-studio/docs'
+ *     config:
+ *       dir: '<preset dir>\文档'
+ *
  * It deliberately imports no `@deepseek-ai/*` package: a tool definition is a
  * plain object (`tools.register` needs `output.render` and a JSON schema), so
  * this part runs — and can be unit-tested — without the host's module map.
@@ -17,7 +25,7 @@ import path from 'node:path'
 import { splitFrontmatter } from './frontmatter.js'
 
 /** Stable cordis plugin name. */
-export const name = '@local/dsh-studio-docs'
+export const name = 'dsh-preset-studio/docs'
 /** The tool registry is the only service this plugin needs. */
 export const inject = ['tools']
 

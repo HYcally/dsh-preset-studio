@@ -11,6 +11,7 @@
  * them, using the same table the runtime packages are named in.
  */
 import fs from 'node:fs'
+import os from 'node:os'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 import {
@@ -35,7 +36,7 @@ import {
 } from './core.js'
 
 /** Stable cordis plugin name. */
-export const name = '@local/dsh-studio'
+export const name = 'dsh-preset-studio'
 /** The web server is the only service these routes need. */
 export const inject = ['webServer']
 
@@ -234,19 +235,40 @@ function dropStaleLink(profileDir, bundleName, targetDir) {
 
 /* ── routes ───────────────────────────────────────────────────────────────── */
 
-/** The repository root: this package sits one level below it. */
-const REPO_ROOT = fileURLToPath(new URL('..', import.meta.url))
+/** The checkout root, two levels above this file. May hold the user's own 预设/. */
+const REPO_ROOT = fileURLToPath(new URL('../..', import.meta.url))
+/** The package root — everything an installed copy actually ships. */
+const PKG_ROOT = fileURLToPath(new URL('.', import.meta.url))
+
+/** The template a new preset is copied from when the row says nothing. */
+function defaultTemplate() {
+  const inRepo = path.join(REPO_ROOT, '模板', '基础')
+  return fs.existsSync(inRepo) ? inRepo : path.join(PKG_ROOT, 'template')
+}
+
+/** Where presets live when the row says nothing: the checkout's 预设/, or a
+ *  directory of its own for an installed copy (created on first start). */
+function defaultRoot() {
+  const inRepo = path.join(REPO_ROOT, '预设')
+  if (fs.existsSync(inRepo)) return inRepo
+  const home = path.join(os.homedir(), '.dsh', 'presets')
+  try {
+    fs.mkdirSync(home, { recursive: true })
+  } catch {}
+  return home
+}
 
 export function apply(ctx, config) {
-  // The shipped patch carries no absolute paths: the bundle is expected to sit
-  // next to `预设/` and `模板/`. A deployment that keeps them elsewhere says so
-  // in the row's config, and that wins.
+  // The shipped patch carries no absolute paths: a checkout keeps its own
+  // 预设/ and 模板/, and an installed copy falls back to package-relative
+  // paths. A deployment that keeps them elsewhere says so in the row's config,
+  // and that wins.
   const settings = { ...config }
   if (typeof settings.template !== 'string' || settings.template.trim() === '') {
-    settings.template = path.join(REPO_ROOT, '模板', '基础')
+    settings.template = defaultTemplate()
   }
   const roots = resolveRoots(config)
-  if (roots.length === 0) roots.push(path.join(REPO_ROOT, '预设'))
+  if (roots.length === 0) roots.push(defaultRoot())
   ctx.logger?.info?.('[studio] roots: ' + roots.join(', '))
 
   const resolvePreset = (input) => {

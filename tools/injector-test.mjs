@@ -13,7 +13,7 @@ import path from 'node:path'
 import os from 'node:os'
 import { fileURLToPath, pathToFileURL } from 'node:url'
 
-const INJECTOR = fileURLToPath(new URL('../runtime-inject/index.js', import.meta.url))
+const INJECTOR = fileURLToPath(new URL('../packages/studio/inject.js', import.meta.url))
 
 const { apply, name } = await import(pathToFileURL(INJECTOR).href)
 

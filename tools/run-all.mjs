@@ -13,6 +13,7 @@ import path from 'node:path'
 const here = path.dirname(fileURLToPath(import.meta.url))
 const cases = [
   { file: 'studio-flow.mjs', needsDsh: false },
+  { file: 'install-smoke.mjs', needsDsh: false },
   { file: 'injector-test.mjs', needsDsh: false },
   { file: 'studio-client.mjs', needsDsh: true },
 ]
