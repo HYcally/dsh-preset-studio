@@ -45,13 +45,16 @@ DSH 的预设是一个目录 + 一份 `cordis.patch.yml`。预设里的东西其
 
 前提：已装 DSH，`node -v` ≥ 22。
 
-从 GitHub 装（一条命令，profile 名按你的实际情况改）：
+**桌面版**：插件市场的 Discover 里搜 `预设工作室` 或 `preset studio`，点安装，然后重启 DSH。
+侧边栏就会出现「预设工作室」。
+
+**有 `dsh` 命令行**（桌面版不带这个命令）：一条命令，profile 名按你的实际情况改。
 
 ```bash
 dsh plugin --profile web add "github:HYcally/dsh-preset-studio#path:/packages/studio"
 ```
 
-装完重启 DSH，侧边栏出现「预设工作室」。
+装完重启 DSH。
 
 <details>
 <summary>本地开发：直接链一个 checkout</summary>
