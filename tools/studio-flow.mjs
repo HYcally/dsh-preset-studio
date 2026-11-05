@@ -96,13 +96,14 @@ const ctx = {
 }
 mod.apply(ctx, { root, template: templateDir })
 
-async function call(method, routePath, payload) {
+async function call(method, routePath, payload, headers) {
   const route = routes.get(routePath.split('?')[0])
   if (!route) throw new Error('no route ' + routePath)
   const req = Readable.from(payload === undefined ? [] : [Buffer.from(JSON.stringify(payload), 'utf8')])
   req.method = method
   req.url = routePath
   req.socket = { remoteAddress: '127.0.0.1' }
+  req.headers = headers || {}
   let status = 0
   let body = ''
   await route.handler(req, {
@@ -248,7 +249,7 @@ console.log('\n=== 从模板新建 ===')
 console.log(newPatch)
 expect(!/__[A-Z_]+__/.test(newPatch), 'the patch still contains placeholders')
 expect(!/__[A-Z_]+__/.test(newManifest), 'the manifest still contains placeholders')
-expect(newManifest.includes('@local/dsh-preset-test-preset'), 'the package name was not derived from the id')
+expect(newManifest.includes('"dsh-preset-test-preset"'), 'the package name was not derived from the id')
 expect(newPatch.includes("id: test-preset"), 'the patch id was not substituted')
 expect(newPatch.includes("dir: '" + path.join(newDir, '注入') + "'"), 'the patch path was not substituted')
 const newListed = presetOf((await call('GET', R.presets)).json, newDir)
@@ -260,6 +261,15 @@ expect(dupPreset.status === 400, 'creating a preset over an existing folder must
 const badId = await call('POST', R.presetCreate, { title: '另一个', id: '中文id' })
 expect(badId.status === 400, 'a non-ASCII preset id must be refused')
 console.log('重复目录 ->', dupPreset.status, dupPreset.json && dupPreset.json.error)
+
+/* ── 10. a page on another site cannot drive the panel ── */
+const evil = { origin: 'https://evil.example', host: '127.0.0.1:1234' }
+const crossPost = await call('POST', R.presetCreate, { title: '跨站', id: 'cross-site' }, evil)
+expect(crossPost.status === 403, 'a cross-origin POST must be refused, got ' + crossPost.status)
+expect(!fs.existsSync(path.join(root, '跨站')), 'a cross-origin POST still created a folder')
+console.log('跨站写入 ->', crossPost.status, crossPost.json && crossPost.json.error)
+const own = await call('GET', R.presets, undefined, { origin: 'http://127.0.0.1:1234', host: '127.0.0.1:1234' })
+expect(own.status === 200, 'a same-origin request must pass, got ' + own.status)
 
 fs.rmSync(root, { recursive: true, force: true })
 

@@ -125,9 +125,32 @@ function isLoopback(req) {
   return address === '127.0.0.1' || address === '::1' || address === '::ffff:127.0.0.1'
 }
 
+/**
+ * A browser sends `Origin`; a page on another site is not the panel. The routes
+ * are loopback-fenced already, so a missing-origin check would leave any web
+ * page free to POST into the preset folder — a simple request without a custom
+ * header skips the preflight. Its `Origin` must therefore match the `Host` it
+ * is talking to. Non-browser clients (the test harness, curl) send no origin
+ * and stay allowed; they are already loopback-only.
+ */
+function isSameOrigin(req) {
+  const origin = req.headers?.origin
+  if (typeof origin !== 'string' || origin === '') return true
+  if (origin === 'null') return false
+  try {
+    return new URL(origin).host === String(req.headers?.host ?? '')
+  } catch {
+    return false
+  }
+}
+
 function guard(req, res, method) {
   if (!isLoopback(req)) {
     sendJson(res, 403, { error: 'forbidden: loopback-only' })
+    return false
+  }
+  if (!isSameOrigin(req)) {
+    sendJson(res, 403, { error: 'forbidden: cross-origin' })
     return false
   }
   if (req.method !== method) {
